@@ -1,0 +1,226 @@
+
+
+
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Image Form Notification</title>
+
+    <style>
+
+        body{
+            font-family: Arial;
+            background: #f2f2f2;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container{
+            width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px gray;
+        }
+
+        img{
+            width: 100%;
+            border-radius: 10px;
+        }
+
+        button{
+            padding: 10px 20px;
+            background: blue;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+
+        button:hover{
+            background: darkblue;
+        }
+
+        input,
+        textarea{
+            width: 90%;
+            padding: 10px;
+            margin: 10px;
+            border-radius: 5px;
+            border: 1px solid gray;
+        }
+
+        #formPage{
+            display: none;
+        }
+
+        #status{
+            color: green;
+            font-weight: bold;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+
+    <!-- FIRST PAGE -->
+  
+
+    <div class="container" id="homePage">
+
+        <img src="C:\Users\SABARI B\Pictures\sabari.png" alt="Sample Image">
+
+
+        <button onclick="openForm()">
+            Click Here
+        </button>
+
+    </div>
+
+
+
+    <!-- SECOND PAGE -->
+
+    <div class="container" id="formPage">
+
+        <h2>Student Form</h2>
+
+        <form id="telegramForm">
+
+            <input type="text" id="name" placeholder="Enter Name" required>
+
+            <input type="email" id="email" placeholder="Enter Email" required>
+
+            <input type="text" id="phone" placeholder="Enter Phone Number" required>
+
+            <textarea id="message" placeholder="Enter Message"></textarea>
+
+            <button type="submit">
+                Submit
+            </button>
+
+        </form>
+
+        <p id="status"></p>
+
+    </div>
+
+
+
+    <script>
+
+        // YOUR TELEGRAM DETAILS
+
+        const BOT_TOKEN = "8918044800:AAH2ko8TGbLQmtdLK8x2NPV_tAvbi5Php10";
+
+        const CHAT_ID = "6432239639";
+
+
+
+        // SHOW FORM
+
+        function openForm(){
+
+            document.getElementById("homePage").style.display = "none";
+
+            document.getElementById("formPage").style.display = "block";
+
+        }
+
+
+
+        // FORM SUBMIT
+
+        document.getElementById("telegramForm").addEventListener("submit", async function(event){
+
+            event.preventDefault();
+
+            let name = document.getElementById("name").value;
+
+            let email = document.getElementById("email").value;
+
+            let phone = document.getElementById("phone").value;
+
+            let message = document.getElementById("message").value;
+
+
+
+            let text =
+
+`📢 New Form Submission
+
+👤 Name: ${name}
+
+📧 Email: ${email}
+
+📱 Phone: ${phone}
+
+💬 Message: ${message}`;
+
+
+
+            let url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`;
+
+
+
+            try{
+
+                let response = await fetch(url, {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+
+                    body: JSON.stringify({
+
+                        chat_id: CHAT_ID,
+
+                        text: text
+
+                    })
+
+                });
+
+
+
+                if(response.ok){
+
+                    document.getElementById("status").innerHTML =
+                    "Form Submitted Successfully ✅";
+
+                    document.getElementById("telegramForm").reset();
+
+                }
+
+                else{
+
+                    document.getElementById("status").innerHTML =
+                    "Failed To Send ❌";
+
+                }
+
+            }
+
+            catch(error){
+
+                document.getElementById("status").innerHTML =
+                "Error Sending Message ❌";
+
+            }
+
+        });
+
+    </script>
+
+</body>
+</html>
